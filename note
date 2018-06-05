@@ -1,6 +1,16 @@
 天气的数据源：聚合数据
 appkey：5096a060f448e382e5625ea1e4aeece6
 
+
+
+
+使用教学中提供的api
+省市区：http://guolin.tech/api/china/16/117
+天气：
+http://guolin.tech/api/weather?cityid=CN101190401&key=0a0ee2af0a974d0ea509338959ea30a5
+
+
+
 1、罗列全国所有的省市县
 2、切换城市看天气
 3、手动更新和自动更新

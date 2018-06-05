@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <litepal>
-    <dbname value="ZRD_W"></dbname>
+    <dbname value="ZRD_Weather"></dbname>
 
     <version value="1"></version>
 
     <list>
-        <mapping class="com.weather.zrodo.zrd_weather.db.Zrd_Address"></mapping>
+        <mapping class="com.weather.zrodo.zrd_weather.db.Cities"></mapping>
+        <mapping class="com.weather.zrodo.zrd_weather.db.County"></mapping>
+        <mapping class="com.weather.zrodo.zrd_weather.db.Provinces"></mapping>
+
+
 
     </list>
 </litepal>
