@@ -6,8 +6,18 @@ public class Cities extends DataSupport {
     private int id;
     private String cityName;
     private int citycode;
+    private int provincecode;
+
+    public int getProvincecode() {
+        return provincecode;
+    }
+
+    public void setProvincecode(int provincecode) {
+        this.provincecode = provincecode;
+    }
 
     public int getId() {
+
         return id;
     }
 

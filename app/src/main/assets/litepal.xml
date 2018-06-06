@@ -9,7 +9,5 @@
         <mapping class="com.weather.zrodo.zrd_weather.db.County"></mapping>
         <mapping class="com.weather.zrodo.zrd_weather.db.Provinces"></mapping>
 
-
-
     </list>
 </litepal>

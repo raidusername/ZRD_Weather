@@ -17,7 +17,7 @@ private TextView textcity,textchange;
 
     }
     public void init(){
-        //初始化
+       // 初始化
         textcity=(TextView) findViewById(R.id.text_city);
         textchange=(TextView) findViewById(R.id.citychange);
     }
@@ -26,8 +26,8 @@ private TextView textcity,textchange;
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.citychange:
-                Intent intent=new Intent(MainActivity.this,CityChoose.class);
-                startActivity(intent);
+
+
                 break;
                 default:
         }

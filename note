@@ -28,3 +28,14 @@ http://guolin.tech/api/weather?cityid=CN101190401&key=0a0ee2af0a974d0ea509338959
     </list>
 </litepal>
 3、清单文件 <application>中添加配置      android:name="org.litepal.LitePalApplication"
+
+
+
+使用OkHttp请求网络，数据无法解析--okhttp3.internal.http.RealResponseBody@2be8f5f6
+在网络请求过程中出现了这个问题：
+
+okhttp3.internal.http.RealResponseBody@2be8f5f6 请求下来的数据一直无法进行解析，如图
+
+困惑了好长时间，终于想出了了解决方案：
+
+将 String  res = response.body().toString();换成String res = response.body().string();即可.
