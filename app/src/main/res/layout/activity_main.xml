@@ -7,35 +7,16 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <!--<FrameLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent">-->
+    <FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <!--<fragment-->
-    <!--android:id="@+id/choose_area"-->
-    <!--android:name="com.weather.zrodo.zrd_weather.Fragments.ChooseArea"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent" />-->
-    <!--</FrameLayout>-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp">
+    <fragment
+    android:id="@+id/choose_area"
+    android:name="com.weather.zrodo.zrd_weather.Fragments.ChooseArea"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+    </FrameLayout>
 
-        <TextView
-            android:id="@+id/text_city"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="南通"
-            android:textColor="#FFFFFF" />
-
-        <TextView
-            android:id="@+id/citychange"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:text="【切换】"
-            android:textColor="#FFFFFF" />
-    </LinearLayout>
 
 </LinearLayout>

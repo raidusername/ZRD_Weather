@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -23,6 +24,7 @@ import android.widget.Toast;
 
 import com.weather.zrodo.zrd_weather.MainActivity;
 import com.weather.zrodo.zrd_weather.R;
+import com.weather.zrodo.zrd_weather.WeatherActivity;
 import com.weather.zrodo.zrd_weather.db.Cities;
 import com.weather.zrodo.zrd_weather.db.County;
 import com.weather.zrodo.zrd_weather.db.Provinces;
@@ -49,7 +51,7 @@ public class ChooseArea extends Fragment {
     private Button btn_back;
     private ListView list_area;
     private ArrayAdapter adapter;
-    private List<String> datalist = new ArrayList<>();
+    private List<String> datalist = new ArrayList<>();//用来存放省市区的名字
     private List<Provinces> ls_province;
     private List<Cities> ls_city;
     private List<County> ls_county;
@@ -59,10 +61,9 @@ public class ChooseArea extends Fragment {
     private View view;
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-         view = inflater.inflate(R.layout.activity_city_choose, container, false);
+        view = inflater.inflate(R.layout.activity_city_choose, container, false);
         text_title = (TextView) view.findViewById(R.id.text_title);
         btn_back = (Button) view.findViewById(R.id.btn_back);
         list_area = (ListView) view.findViewById(R.id.list_area);
@@ -74,6 +75,7 @@ public class ChooseArea extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        qureyPrivicen();
         list_area.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -84,6 +86,25 @@ public class ChooseArea extends Fragment {
                 } else if (selectLevel == LEVEL_CITY) {
                     city = ls_city.get(position);
                     qureyCounties();
+                } else if (selectLevel == LEVEL_COUNTY) {
+                    String weatherid = ls_county.get(position).getWeatherId();
+                    String countyname = ls_county.get(position).getCountyName();
+                    if (getActivity()instanceof MainActivity){
+                        Intent intent = new Intent(getActivity(),WeatherActivity.class);
+                        intent.putExtra("weather_id", weatherid);
+                        intent.putExtra("countyname", countyname);
+                        startActivity(intent);
+                        getActivity().finish();
+                    }else if (getActivity()instanceof WeatherActivity){
+
+                        WeatherActivity activity=(WeatherActivity) getActivity();
+                        activity.drawerLayout.closeDrawers();
+                        activity.refresh.setRefreshing(true);
+                        activity.requestweather(weatherid);
+                    }
+
+
+
                 }
 
             }
@@ -97,14 +118,12 @@ public class ChooseArea extends Fragment {
 
                 } else if (selectLevel == LEVEL_CITY) {
 
-                   qureyPrivicen();
+                    qureyPrivicen();
                 }
             }
         });
-        qureyPrivicen();
+
     }
-
-
 
 
     /**
@@ -113,14 +132,16 @@ public class ChooseArea extends Fragment {
     public void qureyPrivicen() {
         text_title.setText("中国");
         btn_back.setVisibility(View.GONE);
+        // 从数据库中获取Provinces表的所有内容
         ls_province = DataSupport.findAll(Provinces.class);
         if (ls_province.size() > 0) {
             datalist.clear();
             for (Provinces p : ls_province) {
                 datalist.add(p.getProvinceName());
             }
-            adapter.notifyDataSetChanged();
-            list_area.setSelection(0);
+
+            adapter.notifyDataSetChanged();//刷新适配器
+            list_area.setSelection(0);//默认把第一个数据放在最上面
             selectLevel = LEVEL_PROVINCE;
 
         } else {
@@ -135,41 +156,41 @@ public class ChooseArea extends Fragment {
 
         text_title.setText(provinces.getProvinceName());
         btn_back.setVisibility(View.VISIBLE);
-        ls_city=DataSupport.where("provincecode= ?",String.valueOf(provinces.getProvincecode())).find(Cities.class);
-        if (ls_city.size()>0){
+        ls_city = DataSupport.where("provincecode= ?", String.valueOf(provinces.getProvincecode())).find(Cities.class);
+        if (ls_city.size() > 0) {
             datalist.clear();
-            for (Cities city:ls_city){
+            for (Cities city : ls_city) {
                 datalist.add(city.getCityName());
             }
 
             adapter.notifyDataSetChanged();
             list_area.setSelection(0);
             selectLevel = LEVEL_CITY;
-        }else {
-            int provincecode=provinces.getProvincecode();
-            String address=Zrd_Interface.getCities(provincecode);
-            qureyFtommService(address,"Cities");
+        } else {
+            int provincecode = provinces.getProvincecode();
+            String address = Zrd_Interface.getCities(provincecode);
+            qureyFtommService(address, "Cities");
         }
     }
 
     public void qureyCounties() {
         text_title.setText(city.getCityName());
         btn_back.setVisibility(View.VISIBLE);
-        ls_county=DataSupport.where("citycode= ?",String.valueOf(city.getCitycode())).find(County.class);
-        if (ls_county.size()>0){
+        ls_county = DataSupport.where("citycode= ?", String.valueOf(city.getCitycode())).find(County.class);
+        if (ls_county.size() > 0) {
             datalist.clear();
-            for (County county:ls_county){
+            for (County county : ls_county) {
                 datalist.add(county.getCountyName());
             }
 
             adapter.notifyDataSetChanged();
             list_area.setSelection(0);
             selectLevel = LEVEL_COUNTY;
-        }else {
-            int provincecode=provinces.getProvincecode();
-            int citycode=city.getCitycode();
-            String address=Zrd_Interface.getCounty(provincecode,citycode);
-            qureyFtommService(address,"County");
+        } else {
+            int provincecode = provinces.getProvincecode();
+            int citycode = city.getCitycode();
+            String address = Zrd_Interface.getCounty(provincecode, citycode);
+            qureyFtommService(address, "County");
         }
 
     }
@@ -187,7 +208,8 @@ public class ChooseArea extends Fragment {
                     @Override
                     public void run() {
                         closeDialogprogress();
-                        Toast.makeText(view.getContext(),"加载失败",Toast.LENGTH_SHORT).show(); }
+                        Toast.makeText(view.getContext(), "加载失败", Toast.LENGTH_SHORT).show();
+                    }
                 });
             }
 
@@ -205,6 +227,7 @@ public class ChooseArea extends Fragment {
                     result = Utillty.jsoncounty(responseText, city.getCitycode());
                 }
                 if (result) {
+                    //ui线程更新
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

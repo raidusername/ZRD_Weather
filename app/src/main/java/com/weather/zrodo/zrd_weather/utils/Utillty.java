@@ -2,16 +2,35 @@ package com.weather.zrodo.zrd_weather.utils;
 
 
 import android.text.TextUtils;
+import android.util.Log;
 
+import com.google.gson.Gson;
 import com.weather.zrodo.zrd_weather.db.Cities;
 import com.weather.zrodo.zrd_weather.db.County;
 import com.weather.zrodo.zrd_weather.db.Provinces;
+import com.weather.zrodo.zrd_weather.gson.HeWeather;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 
 public class Utillty {
+
+
+    /**
+     * 将返回的数据解析成weather的实体类
+     */
+    public static HeWeather HandleWeatherResponse(String response) {
+        if (response != null) {
+            Gson gson = new Gson();
+            HeWeather weather=gson.fromJson(response, HeWeather.class);
+            return weather;
+        }
+        return null;
+    }
+
+
     /**
      * 解析和处理服务器返回的省级接口数据
      */
@@ -39,7 +58,7 @@ public class Utillty {
     /**
      * 解析和处理服务器返回的市级接口数据
      */
-    public static Boolean jsoncity(String response,int provincecode) {
+    public static Boolean jsoncity(String response, int provincecode) {
         if (!TextUtils.isEmpty(response)) {
             try {
                 JSONArray allcities = new JSONArray(response);
@@ -64,7 +83,7 @@ public class Utillty {
     /**
      * 解析和处理服务器返回的区级接口数据
      */
-    public static Boolean jsoncounty(String response,int citycode) {
+    public static Boolean jsoncounty(String response, int citycode) {
         if (!TextUtils.isEmpty(response)) {
             try {
                 JSONArray allcounty = new JSONArray(response);

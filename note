@@ -39,3 +39,18 @@ okhttp3.internal.http.RealResponseBody@2be8f5f6 请求下来的数据一直无�
 困惑了好长时间，终于想出了了解决方案：
 
 将 String  res = response.body().toString();换成String res = response.body().string();即可.
+
+
+
+
+ListView的setSelection用法
+这次研究xListView源码看见其使用了这个setSelection(int position)方法，看了下其英文注释不明白什么意思，自己写了个demo了解了下其用法.
+
+这个方法的作用就是将第position个item显示在listView的最上面一项，假如有一个ListView控件，其一次只能显示10个item，但现在有20个数据项，设置好adapter以后，默认是第一个数据项显示在最上面，如果我现在调用setSelection(2),则第3个数据项会显示在最上面，调用setSelection(9),则第10个数据项会显示在最上面。但需要注意的是，如果我调用setSelection(19),第20个数据项不会显示在最上面，因为其可以显示10个数据项，最上面的一个最大只可能是11，也就是说如果setSelection传入参数大于10，都只会显示11；如果小于11，则传入参数是几最上面一项显示的就是几.
+listView滚动到最后一个条目的方法:listview.setSelection(n-1)(n为数据的个数)
+
+listview.setFooterDividersEnabled(false);这个方法是控制footer下边是否显示默认的分隔线，如果为true,显示分隔线，否则不显示
+
+
+
+ScrollView 内部只允许放一个子布局

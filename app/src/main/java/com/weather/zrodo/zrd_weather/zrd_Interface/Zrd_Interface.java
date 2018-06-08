@@ -12,7 +12,7 @@ public  class Zrd_Interface {
     public static String getCounty(int provincecode,int citycode){
         return host+"/china/"+provincecode+"/"+citycode;
     }
-    public static String getWeather(int weatherID){
+    public static String getWeather(String weatherID){
         return host+"/weather?cityid="+weatherID+"&key="+APPKEY;
     }
 }
